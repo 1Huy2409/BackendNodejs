@@ -1,0 +1,47 @@
+.badge {
+    color: black;
+}
+.btn {
+    margin: 0 8px;
+}
+.pagination {
+    margin-left: 8px;
+}
+/* begin show alert */
+[show-alert] {
+    position: fixed;
+    top: 70px;
+    right: 15px;
+    z-index: 999;
+}
+[show-alert].alert-hidden {
+    animation-duration: 0.5s;
+    animation-name: alert-hidden;
+    animation-fill-mode: both;
+}
+@keyframes alert-hidden {
+    from {
+        right: 15px;
+    }
+    to {
+        right: -100%;
+        display: none;
+    }
+}
+[show-alert] [close-alert] {
+    cursor: pointer;
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 4px 8px;
+}
+/* end show alert */
+
+/* css phan preview image */
+.image-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+}
+.image-preview[src = ""] {
+    display: none;
+}

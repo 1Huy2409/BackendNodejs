@@ -1,0 +1,13 @@
+.inner-item img {
+    width: 100px;
+    height: 100px;
+}
+.product-item {
+    border: 2px solid black;
+    width: 150px;
+}
+a {
+    text-decoration: none;
+    color: black;
+    font-size: 24px;
+}
