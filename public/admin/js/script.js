@@ -71,3 +71,36 @@ if (buttonStatus.length>0) {
         }
     }
 //end image
+//begin sort
+const sort = document.querySelector('[sort]');
+if (sort) {
+    let url = new URL(window.location.href);
+    const sortSelect = sort.querySelector('[sort-select]')
+    const sortClear = sort.querySelector('[sort-clear]')
+    //lay value tu sortSelect de dua len query
+    if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+            const [sortKey, sortValue] = e.target.value.split("-");
+            url.searchParams.set("sortKey", sortKey);
+            url.searchParams.set("sortValue", sortValue);
+            window.location.href = url.href
+        })
+    }
+    if (sortClear) {
+        sortClear.addEventListener('click', ()=> {
+            url.searchParams.delete('sortKey')
+            url.searchParams.delete('sortValue')
+            window.location.href = url.href
+        })
+    }
+    //them thuộc tính selected = true cho option duoc chon
+    const sortKey = url.searchParams.get('sortKey')
+    const sortValue = url.searchParams.get('sortValue')
+    if (sortKey && sortValue) {
+        const stringSort = `${sortKey}-${sortValue}`;
+        const option = sort.querySelector(`option[value = ${stringSort}]`);
+        option.selected = true;
+    }
+
+}
+//end sort

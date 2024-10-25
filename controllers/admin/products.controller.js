@@ -28,9 +28,15 @@ module.exports.index = async (req, res) => {
             limitItem: 4
         },
         countDocs
-    )
+    )   
     //end pagination
-    const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip);
+    const sortOptions = {};
+    if (req.query.sortKey && req.query.sortValue) {
+        const sortKey = req.query.sortKey;
+        const sortValue = req.query.sortValue;
+        sortOptions[sortKey] = sortValue;
+    }
+    const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip).sort(sortOptions);
     // console.log(products)
     res.render("admin/pages/products/index", {
         pageTitle: "Trang danh sách sản phẩm",
@@ -135,7 +141,7 @@ module.exports.editPatch = async (req, res) => {
     const id = req.params.id;
     console.log(id);
     try {
-        await Product.updateOne({_id: id}, req.body);
+        await Product.updateOne({ _id: id }, req.body);
         req.flash('success', 'Chỉnh sửa sản phẩm thành công!')
     }
     catch (error) {
@@ -159,7 +165,7 @@ module.exports.detail = async (req, res) => {
             product: product
         })
     }
-    catch(error) {
+    catch (error) {
         req.flash('error', 'Không thể xem chi tiết sản phẩm!')
     }
 }
