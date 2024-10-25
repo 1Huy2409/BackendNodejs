@@ -100,9 +100,6 @@ module.exports.createPost = async (req, res) => {
         let countProducts = await Product.countDocuments();
         req.body.position = parseInt(countProducts + 1);
     }
-    if (req.file) {
-        req.body.thumbnail = `/uploads/${req.file.filename}`
-    }
     const product = new Product(req.body) //truyen object req.body vao db
     await product.save();
 
