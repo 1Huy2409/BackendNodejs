@@ -1,43 +1,65 @@
-//- layout chung cho trang admin
-//- h1 Trang tổng quan
-//- nhung layout default vao
 extend ../../layouts/default.pug
-//- include mixins
 include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
-include ../../mixins/pagination.pug
-include ../../mixins/form-change-multi.pug
-include ../../mixins/alert.pug
-include ../../mixins/sort.pug
 block main 
-    
-    +alert-success(5000)
-    h1 Danh sách sản phẩm
-    //- thêm một thẻ div cho phần sort
-    .card.mb-3
-        .card-header Sắp xếp
-        .card-body 
-            .row 
-                .col-4
-                    +sort()
+    h1 Danh mục sản phẩm
     .card.mb-3 
-        .card-header Bộ lọc và tìm kiếm 
+        .card-header Sắp xếp 
         .card-body
-            .row
-                .col-6
-                    +filterStatus(filterStatus)
-                .col-4
-                    +search(keyword)
-
+            .row 
+                .col-6 
+                    div(sort)
+                        select(
+                            class = "form-control"
+                            name = "sort"
+                            sort-select
+                        )
+                            option(disabled selected) --Chọn kiểu sắp xếp--
+                            option(value = "position-desc") Vị trí giảm dần
+                            option(value = "position-asc") Vị trí tăng dần
+                            option(value = "title-desc") Tiêu đề Z-A 
+                            option(value = "title-asc") Tiêu đề A-Z
+                        button(
+                            class = "btn btn-danger mt-2"
+                            sort-clear
+                        ) Clear
     .card.mb-3 
-        .card-header Danh sách sản phẩm 
+        .card-header Bộ lọc và tìm kiếm
         .card-body
             .row    
+                .col-6
+                    +filterStatus(filterStatus)
+                .col-4 
+                    +search(keyword)
+    .card.mb-3 
+        .card-header Danh mục sản phẩm 
+        .card-body
+            .row 
                 .col-8
-                    +form-change-multi(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+                    form(
+                        action = `${prefixAdmin}/products-category/change-multi?_method=PATCH`
+                        method = "POST"
+                        form-change-multi
+                    )
+                        .d-flex.align-items-starts
+                            .form-group
+                                select(name = "type" class = "form-control")
+                                    option(disabled selected) --Chọn hành động--
+                                    option(value = "active") Hoạt động
+                                    option(value = "inactive") Dừng hoạt động
+                                    option(value = "delete-all") Xóa tất cả
+                                    option(value = "change-position") Thay đổi vị trí
+                            .form-group
+                                input(
+                                    type = "text"
+                                    name = "ids"
+                                    value = ""
+                                    class = "form-control d-none"
+                                )
+                            button(type = "submit" class = "btn btn-primary") Áp dụng
                 .col-4 
                     a(
-                        href = `${prefixAdmin}/products/create`
+                        href = `${prefixAdmin}/products-category/create`
                         class = "btn btn-outline-success"
                     ) + Thêm mới
             table(
@@ -51,12 +73,12 @@ block main
                         th STT
                         th Hình ảnh
                         th Tiêu đề
-                        th Giá 
+                        th Danh mục cha
                         th Vị trí
                         th Trạng thái
                         th Hành động
                 tbody   
-                    each item, index in product 
+                    each item, index in productCategory 
                         tr 
                             td 
                                 input(
@@ -73,7 +95,7 @@ block main
                                     height = "auto"
                                 )
                             td #{item.title}
-                            td #{item.price}$
+                            td #{item.parent_id}
                             td  
                                 input(
                                     type = "number"
@@ -109,17 +131,3 @@ block main
                                     button-delete
                                     data-id = item.id
                                 ) Xóa
-    +pagination(pagination)
-    form(
-    action = ""
-    data-path = `${prefixAdmin}/products/change-status`
-    id = "form-change-status"
-    method = "POST"
-    )
-    form(
-    action = ""
-    data-path = `${prefixAdmin}/products/delete`
-    id = "form-delete-item"
-    method = "POST"
-    )
-    script(src = "/admin/js/product.js")

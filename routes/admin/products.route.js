@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router(); //tu express goi mot ham Router
+const router = express.Router();
 const controller = require("../../controllers/admin/products.controller")
 // const storageMulter = require("../../helper/storageMulter")
 const multer = require('multer')
