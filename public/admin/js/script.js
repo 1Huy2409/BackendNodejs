@@ -1,5 +1,4 @@
 const buttonStatus = document.querySelectorAll("[button-status]")
-console.log(buttonStatus);
 if (buttonStatus.length > 0) {
     //khi so luong nut > 0 chay vao kiem tra tung button
     let url = new URL(window.location.href); //lay ra url cua page
@@ -123,8 +122,39 @@ if (formChangeMulti) {
     })
     
 }
-
 //end code multi-change
+
+//begin code button change status
+const buttonChangeStatus = checkboxMulti.querySelectorAll("[button-change-status]");
+const formChangeStatus = document.querySelector("#form-change-status");
+console.log(formChangeStatus);
+buttonChangeStatus.forEach(button => {
+    button.addEventListener('click', () => {
+        //lay id va status hien tai
+        const id = button.getAttribute("data-id");
+        const currentStatus = button.getAttribute("data-status")
+        const status = (currentStatus == "active") ? "inactive" : "active";
+        const path = formChangeStatus.getAttribute("data-path");
+        const action = path + `/${id}/${status}?_method=PATCH`;
+        formChangeStatus.action = action;
+        formChangeStatus.submit();
+    })
+})
+//end code button change status
+
+//begin code delete item
+const formDeleteItem = document.querySelector("#form-delete-item");
+const buttonsDelete = checkboxMulti.querySelectorAll("[button-delete]")
+buttonsDelete.forEach(button => {
+    button.addEventListener("click", () => {
+        const id = button.getAttribute("data-id");
+        const path = formDeleteItem.getAttribute("data-path");
+        const action = path + `/${id}?_method=PATCH`;
+        formDeleteItem.action = action;
+        formDeleteItem.submit();
+    })
+})
+//end code delete item
 //code logic phan preview buc anh 
 //begin image
 //tim ra input anh 
@@ -175,6 +205,5 @@ if (sort) {
         const option = sort.querySelector(`option[value = ${stringSort}]`);
         option.selected = true;
     }
-
 }
 //end sort

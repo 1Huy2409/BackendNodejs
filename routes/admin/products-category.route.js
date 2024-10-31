@@ -15,4 +15,17 @@ router.post(
 )
 //form-change-multi route
 router.patch('/change-multi', controller.changeMulti);
+//button change status
+router.patch('/change-status/:id/:status', controller.buttonChangeStatus)
+router.patch('/delete/:id', controller.buttonChangeStatus)
+//button xem chi tiet san pham
+router.get('/detail/:id', controller.detail)
+//button chỉnh sửa sản phẩm
+router.get('/edit/:id', controller.editItem)
+router.patch(
+    '/edit/:id',
+    upload.single('thumbnail'),
+    uploadCloud.upload,
+    controller.editPatch
+)
 module.exports = router;   
