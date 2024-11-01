@@ -45,3 +45,6 @@
 .image-preview[src = ""] {
     display: none;
 }
+.permission_th {
+    text-align: center;
+}

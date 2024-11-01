@@ -47,3 +47,22 @@ module.exports.editPatch = async (req, res) => {
     }
     res.redirect('back')
 }
+module.exports.permission = async (req, res) => {
+    //render ra giao dien phan quyen 
+    const find = {
+        delete: false
+    }
+    const records = await Roles.find(find);
+    res.render("admin/pages/roles/permission", {
+        pageTitle: "Thiết lập phân quyền",
+        records: records
+    })
+}
+module.exports.editPermission = async (req, res) => {
+    //render ra giao dien phan quyen 
+    const permission = JSON.parse(req.body.permission);
+    for(let item of permission) {
+        await Roles.updateOne({ _id: item.id}, {permission: item.permission})
+    }
+    res.redirect('back')
+}
