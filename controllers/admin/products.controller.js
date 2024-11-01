@@ -1,8 +1,10 @@
 // [GET] /admin/products
 const Product = require("../../models/product.model")
+const ProductsCategory = require("../../models/productsCategory.model")
 const filterStatusHelper = require("../../helper/filterStatus")
 const searchHelper = require("../../helper/search")
 const paginationHelper = require("../../helper/pagination")
+const createTreeHelper = require("../../helper/createTree")
 const systemConfig = require("../../config/system")
 module.exports.index = async (req, res) => {
     //bo loc
@@ -93,8 +95,15 @@ module.exports.deleteItem = async (req, res) => {
 }
 //controller them moi san pham /admin/products/create
 module.exports.create = async (req, res) => {
+    //dua ra danh muc san pham 
+    const find = {
+        delete: false
+    }
+    const category = await ProductsCategory.find(find);
+    const newCategory = createTreeHelper.tree(category);
     res.render("admin/pages/products/create", {
-        pageTitle: "Thêm mới sản phẩm"
+        pageTitle: "Thêm mới sản phẩm",
+        category: newCategory
     })
 }
 module.exports.createPost = async (req, res) => {
@@ -120,9 +129,15 @@ module.exports.editItem = async (req, res) => {
             _id: id
         }
         const product = await Product.findOne(find)
+        let data = {
+            delete: false
+        }
+        const category = await ProductsCategory.find(data);
+        const newCategory = createTreeHelper.tree(category);
         res.render("admin/pages/products/edit", {
             pageTitle: "Chỉnh sửa sản phẩm",
-            product: product
+            product: product,
+            category: newCategory
         })
     }
     catch (error) {

@@ -5,7 +5,7 @@ const createTreeHelper = require("../../helper/createTree")
 // const paginationHelper = require("../../helper/pagination")
 const systemConfig = require("../../config/system")
 
-module.exports.index = async(req, res) => {
+module.exports.index = async (req, res) => {
     const find = {
         delete: false
     }
@@ -28,7 +28,7 @@ module.exports.index = async(req, res) => {
         const sortKey = req.query.sortKey;
         const sortValue = req.query.sortValue;
         mySort = {
-            [sortKey] : sortValue 
+            [sortKey]: sortValue
         }
     }
     const records = await ProductsCategory.find(find).sort(mySort);
@@ -51,31 +51,31 @@ module.exports.create = async (req, res) => {
         records: newRecords
     })
 }
-module.exports.createPost = async(req, res) => {
+module.exports.createPost = async (req, res) => {
     if (req.body.position == "") {
         let countDocuments = await ProductsCategory.countDocuments();
         req.body.position = parseInt(countDocuments + 1);
-    } 
+    }
     const record = new ProductsCategory(req.body);
     await record.save();
     res.redirect(`${systemConfig.prefixAdmin}/products-category`);
 }
 
-module.exports.changeMulti = async (req,res) => {
+module.exports.changeMulti = async (req, res) => {
     //update lai
     const type = req.body.type;
     console.log(type);
     const ids = req.body.ids.split(", ");
     console.log(ids);
-    switch(type) {
+    switch (type) {
         case "active":
-            await ProductsCategory.updateMany({_id: {$in: ids}}, {status: "active"})
+            await ProductsCategory.updateMany({ _id: { $in: ids } }, { status: "active" })
             break;
         case "inactive":
-            await ProductsCategory.updateMany({_id: {$in: ids}}, {status: "inactive"})
+            await ProductsCategory.updateMany({ _id: { $in: ids } }, { status: "inactive" })
             break;
         case "delete-all":
-            await ProductsCategory.updateMany({_id: {$in: ids}}, {delete: true, deleteAt: new Date()});
+            await ProductsCategory.updateMany({ _id: { $in: ids } }, { delete: true, deleteAt: new Date() });
             break;
         case "change-position":
             for (let item of ids) {
@@ -83,7 +83,7 @@ module.exports.changeMulti = async (req,res) => {
                 //cap nhat vi tri moi cho tung item
                 position = parseInt(position);
                 console.log(position)
-                await ProductsCategory.updateOne({_id: id}, {position: position});
+                await ProductsCategory.updateOne({ _id: id }, { position: position });
             }
             break;
     }
@@ -95,10 +95,10 @@ module.exports.buttonChangeStatus = async (req, res) => {
     if (req.params.status) {
         const status = req.params.status;
         //update lai cho database
-        await ProductsCategory.updateOne({_id: id}, {status: status});
+        await ProductsCategory.updateOne({ _id: id }, { status: status });
     }
     else {
-        await ProductsCategory.updateOne({_id: id}, {delete: true});
+        await ProductsCategory.updateOne({ _id: id }, { delete: true });
     }
     res.redirect('back')
 }
@@ -114,17 +114,23 @@ module.exports.detail = async (req, res) => {
         product: productCategory
     })
 }
-module.exports.editItem = async(req, res) => {
+module.exports.editItem = async (req, res) => {
     try {
         const id = req.params.id;
-        let find = {
+        let data = {
             delete: false,
             _id: id
         }
-        const productCategory = await ProductsCategory.findOne(find);
+        let find = {
+            delete: false
+        }
+        const productCategory = await ProductsCategory.findOne(data);
+        const records = await ProductsCategory.find(find);
+        const newRecords = createTreeHelper.tree(records);
         res.render("admin/pages/productsCategory/edit", {
             pageTitle: "Chỉnh sửa danh mục sản phẩm",
-            product: productCategory
+            product: productCategory,
+            records: newRecords
         })
     }
     catch (error) {
@@ -132,7 +138,7 @@ module.exports.editItem = async(req, res) => {
         res.redirect(`${systemConfig.prefixAdmin}/products-category`);
     }
 }
-module.exports.editPatch = async(req, res) => {
+module.exports.editPatch = async (req, res) => {
     req.body.position = parseInt(req.body.position)
     if (req.file) {
         req.body.thumbnail = `/uploads/${req.file.filename}`

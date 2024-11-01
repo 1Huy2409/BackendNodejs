@@ -1,6 +1,7 @@
 //- tạo giao diện thêm sản phẩm mới
 extend ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 block main 
     +alert-error(5000)
     +alert-success(5000)
@@ -22,6 +23,15 @@ block main
                 value = product.title
                 required
             )
+        div(class = "form-group")
+            label(for = "product_category_id") Danh mục
+            select(
+                name = "product_category_id"
+                id = "product_category_id"
+                class = "form-control"
+            )
+                option(value = "") -- Chọn danh mục --
+                +select-tree(category, 1, product.product_category_id)
         div(class = "form-group")
             label(form = "desc") Mô tả
             textarea(
@@ -113,5 +123,5 @@ block main
             button(
                 type = "submit"
                 class = "btn btn-primary"
-            ) Chỉnh sửa
+            ) Cập nhật
     script(src = "/admin/js/product.js")
