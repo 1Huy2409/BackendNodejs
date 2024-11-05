@@ -12,4 +12,10 @@ router.post('/create',
     upload.single('avatar'),
     uploadCloud.upload, 
     controller.createPost);
+router.get('/edit/:id', controller.editItem);
+router.patch('/edit/:id', 
+    upload.single('thumbnail'),
+    uploadCloud.upload,
+    controller.editPatch
+);
 module.exports = router;

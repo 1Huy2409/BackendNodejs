@@ -2,12 +2,12 @@ const Accounts = require("../../models/account.model")
 const Roles = require("../../models/roles.model")
 const systemConfig = require("../../config/system")
 var md5 = require('md5');
-const Account = require("../../models/account.model");
+const system = require("../../config/system");
 module.exports.index = async (req, res) => {
     const find = {
         delete: false
     }
-    const records = await Account.find(find).select("-password -token")
+    const records = await Accounts.find(find).select("-password -token")
     for (let item of records) {
         const role = await Roles.findOne({
             _id: item.role_id,
@@ -48,4 +48,51 @@ module.exports.createPost = async (req, res) => {
         await records.save();
         res.redirect(`${systemConfig.prefixAdmin}/accounts`);
     }
+}
+module.exports.editItem = async (req, res) => {
+    let find = {
+        _id: req.params.id,
+        delete: false
+    }
+    try {
+        const account = await Accounts.findOne(find);
+        const role = {
+            delete: false
+        }
+        const roles = await Roles.find(role);
+        res.render("admin/pages/accounts/edit", {
+            pageTitle: "Chỉnh sửa thông tin tài khoản",
+            roles: roles,
+            account: account
+        })
+    }
+    catch(error) {
+        res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+    }
+}
+module.exports.editPatch = async (req, res) => {
+    const id = req.params.id;
+    const emailExist = await Accounts.findOne(
+        {
+            _id: { $ne: id},
+            email: req.body.email,
+            delete: false
+        }
+    )
+    if (emailExist) {
+        req.flash("error", "Email này đã được tạo tài khoản")
+    }
+    else {
+        if (req.body.password) {
+            //neu co thay doi ve mat khau
+            req.body.password = md5(req.body.password)
+            console.log("OK");
+        }
+        else {
+            delete req.body.password
+        }
+        await Accounts.updateOne({_id: id}, req.body);
+        req.flash("success", "Cập nhật thông tin tài khoản thành công")
+    }
+    res.redirect('back')
 }
