@@ -78,7 +78,7 @@ module.exports.changeMulti = async (req, res) => {
             await ProductsCategory.updateMany({ _id: { $in: ids } }, { delete: true, deleteAt: new Date() });
             break;
         case "change-position":
-            for (let item of ids) {
+            for (let item of ids) { 
                 let [id, position] = item.split("-");
                 //cap nhat vi tri moi cho tung item
                 position = parseInt(position);
