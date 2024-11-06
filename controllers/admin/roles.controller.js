@@ -7,7 +7,7 @@ module.exports.index = async (req, res) => {
     const roles = await Roles.find(find);
     res.render("admin/pages/roles/index", {
         pageTitle: "Nhóm quyền",
-        roles: roles
+        data: roles
     })
 }
 module.exports.create = async (req, res) => {

@@ -1,93 +1,95 @@
-extend ../../layouts/default.pug
+extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/table-tree.pug
 block main 
-    h1 Danh mục sản phẩm
-    .card.mb-3 
-        .card-header Sắp xếp 
-        .card-body
-            .row 
-                .col-6 
-                    div(sort)
-                        select(
-                            class = "form-control"
-                            name = "sort"
-                            sort-select
+    if (roles.permission.includes("product-category_view"))
+        h1 Danh mục sản phẩm
+        .card.mb-3 
+            .card-header Sắp xếp 
+            .card-body
+                .row 
+                    .col-6 
+                        div(sort)
+                            select(
+                                class = "form-control"
+                                name = "sort"
+                                sort-select
+                            )
+                                option(disabled selected) --Chọn kiểu sắp xếp--
+                                option(value = "position-desc") Vị trí giảm dần
+                                option(value = "position-asc") Vị trí tăng dần
+                                option(value = "title-desc") Tiêu đề Z-A 
+                                option(value = "title-asc") Tiêu đề A-Z
+                            button(
+                                class = "btn btn-danger mt-2"
+                                sort-clear
+                            ) Clear
+        .card.mb-3 
+            .card-header Bộ lọc và tìm kiếm
+            .card-body
+                .row    
+                    .col-6
+                        +filterStatus(filterStatus)
+                    .col-4 
+                        +search(keyword)
+        .card.mb-3 
+            .card-header Danh mục sản phẩm 
+            .card-body
+                .row 
+                    .col-8
+                        form(
+                            action = `${prefixAdmin}/products-category/change-multi?_method=PATCH`
+                            method = "POST"
+                            form-change-multi
                         )
-                            option(disabled selected) --Chọn kiểu sắp xếp--
-                            option(value = "position-desc") Vị trí giảm dần
-                            option(value = "position-asc") Vị trí tăng dần
-                            option(value = "title-desc") Tiêu đề Z-A 
-                            option(value = "title-asc") Tiêu đề A-Z
-                        button(
-                            class = "btn btn-danger mt-2"
-                            sort-clear
-                        ) Clear
-    .card.mb-3 
-        .card-header Bộ lọc và tìm kiếm
-        .card-body
-            .row    
-                .col-6
-                    +filterStatus(filterStatus)
-                .col-4 
-                    +search(keyword)
-    .card.mb-3 
-        .card-header Danh mục sản phẩm 
-        .card-body
-            .row 
-                .col-8
-                    form(
-                        action = `${prefixAdmin}/products-category/change-multi?_method=PATCH`
-                        method = "POST"
-                        form-change-multi
-                    )
-                        .d-flex.align-items-starts
-                            .form-group
-                                select(name = "type" class = "form-control")
-                                    option(disabled selected) --Chọn hành động--
-                                    option(value = "active") Hoạt động
-                                    option(value = "inactive") Dừng hoạt động
-                                    option(value = "delete-all") Xóa tất cả
-                                    option(value = "change-position") Thay đổi vị trí
-                            .form-group
-                                input(
-                                    type = "text"
-                                    name = "ids"
-                                    value = ""
-                                    class = "form-control d-none"
-                                )
-                            button(type = "submit" class = "btn btn-primary") Áp dụng
-                .col-4 
-                    a(
-                        href = `${prefixAdmin}/products-category/create`
-                        class = "btn btn-outline-success"
-                    ) + Thêm mới
-            table(
-                class = "table table-hover table-sm"
-                checkbox-multi = ""
-            )
-                thead 
-                    tr
-                        th
-                            input(type = "checkbox" name = "checkall")
-                        th STT
-                        th Hình ảnh
-                        th Tiêu đề
-                        th Vị trí
-                        th Trạng thái
-                        th Hành động
-                tbody   
-                    +table-tree(productCategory)
-    form(
-        action = ""
-        data-path = `${prefixAdmin}/products-category/change-status`
-        id = "form-change-status"
-        method = "POST"
-    )
-    form(
-        action = ""
-        data-path = `${prefixAdmin}/products-category/delete`
-        id = "form-delete-item"
-        method = "POST"
-    )
+                            .d-flex.align-items-starts
+                                .form-group
+                                    select(name = "type" class = "form-control")
+                                        option(disabled selected) --Chọn hành động--
+                                        option(value = "active") Hoạt động
+                                        option(value = "inactive") Dừng hoạt động
+                                        option(value = "delete-all") Xóa tất cả
+                                        option(value = "change-position") Thay đổi vị trí
+                                .form-group
+                                    input(
+                                        type = "text"
+                                        name = "ids"
+                                        value = ""
+                                        class = "form-control d-none"
+                                    )
+                                button(type = "submit" class = "btn b tn-primary") Áp dụng
+                    .col-4 
+                        if (roles.permission.includes("product-category_create"))
+                            a(
+                                href = `${prefixAdmin}/products-category/create`
+                                class = "btn btn-outline-success"
+                            ) + Thêm mới
+                table(
+                    class = "table table-hover table-sm"
+                    checkbox-multi = ""
+                )
+                    thead 
+                        tr
+                            th
+                                input(type = "checkbox" name = "checkall")
+                            th STT
+                            th Hình ảnh
+                            th Tiêu đề
+                            th Vị trí
+                            th Trạng thái
+                            th Hành động
+                    tbody   
+                        +table-tree(productCategory)
+        form(
+            action = ""
+            data-path = `${prefixAdmin}/products-category/change-status`
+            id = "form-change-status"
+            method = "POST"
+        )
+        form(
+            action = ""
+            data-path = `${prefixAdmin}/products-category/delete`
+            id = "form-delete-item"
+            method = "POST"
+        )

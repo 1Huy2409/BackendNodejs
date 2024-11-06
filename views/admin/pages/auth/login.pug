@@ -10,7 +10,7 @@ block main
             .col-8 
                 h1(class = "text-center") Đăng nhập 
                 form(
-                    action = `${prefixAdmin}/auth/login`
+                    action = `${prefixAdmin}/auth/login?_method=POST`
                     method = "POST"
                 )
                     div(class = "form-group")
@@ -36,4 +36,4 @@ block main
                             type = "submit"
                             class = "btn btn-primary"
                         ) Đăng nhập
-
+    script(src = "/admin/js/product.js")

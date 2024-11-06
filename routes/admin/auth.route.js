@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const controller = require("../../controllers/admin/auth.controller")
 const validate = require("../../validates/admin/login.validate")
+const authMiddleware = require("../../middlewares/admin/auth.middlewares")
 
 router.get('/login', controller.login);
 router.post('/login', 
