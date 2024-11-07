@@ -87,6 +87,7 @@ if (checkboxMulti) {
 
 //form change multi
 const formChangeMulti = document.querySelector("[form-change-multi]")
+console.log(formChangeMulti);   //log ra formChangeMulti
 if (formChangeMulti) {
     formChangeMulti.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -113,6 +114,7 @@ if (formChangeMulti) {
                     ids.push(input.value);
                 }
             })
+            console.log(ids);
             inputIds.value = ids.join(", ");
             formChangeMulti.submit();   
         }

@@ -71,6 +71,7 @@ module.exports.changeStatus = async (req, res) => {
 module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(", ");
+    console.log(ids);
     switch (type) {
         case "active":
             await Product.updateMany({ _id: { $in: ids } }, { status: "active" })
@@ -81,7 +82,12 @@ module.exports.changeMulti = async (req, res) => {
             req.flash('success', `Cập nhật trạng thái dừng hoạt động thành công cho ${ids.length} sản phẩm`);
             break;
         case "delete-all":
-            await Product.updateMany({ _id: { $in: ids } }, { delete: true, deleteAt: new Date() })
+            await Product.updateMany({ _id: { $in: ids } }, { delete: true, 
+                deleteBy: {
+                    account_id: res.locals.user.id,
+                    deletedAt: new Date()
+                }
+             })
             req.flash('success', `Xóa thành công ${ids.length} sản phẩm`)
             break;
         case "change-position":
@@ -101,7 +107,13 @@ module.exports.changeMulti = async (req, res) => {
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id; //lay ra duoc id tren req tu form action
     //delete cac san pham co id do
-    await Product.updateOne({ _id: id }, { delete: true, deleteAt: new Date() });
+    await Product.updateOne({ _id: id }, { delete: true,
+        //  deleteAt: new Date() 
+        deletedBy: {
+            account_id: res.locals.user.id,
+            deletedAt: new Date()
+        }
+    });
     res.redirect('back');
 }
 //controller them moi san pham /admin/products/create
