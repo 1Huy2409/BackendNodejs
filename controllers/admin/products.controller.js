@@ -1,6 +1,7 @@
 // [GET] /admin/products
 const Product = require("../../models/product.model")
 const ProductsCategory = require("../../models/productsCategory.model")
+const Accounts = require("../../models/account.model")
 const filterStatusHelper = require("../../helper/filterStatus")
 const searchHelper = require("../../helper/search")
 const paginationHelper = require("../../helper/pagination")
@@ -40,6 +41,16 @@ module.exports.index = async (req, res) => {
     }
     const products = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip).sort(sortOptions);
     // console.log(products)
+    //lay ra thong tin cua tung san pham 1
+    for (const product of products) {
+        const user = await Accounts.findOne({
+            _id: product.createdBy.account_id
+        })
+        if (user) {
+            //add them 1 key vao product
+            product.accountFullName = user.fullName
+        }
+    }
     res.render("admin/pages/products/index", {
         pageTitle: "Trang danh sách sản phẩm",
         product: products,
@@ -95,6 +106,7 @@ module.exports.deleteItem = async (req, res) => {
 }
 //controller them moi san pham /admin/products/create
 module.exports.create = async (req, res) => {
+    console.log(res.locals.user)
     //dua ra danh muc san pham 
     const find = {
         delete: false
@@ -114,6 +126,12 @@ module.exports.createPost = async (req, res) => {
         //tang
         let countProducts = await Product.countDocuments();
         req.body.position = parseInt(countProducts + 1);
+    }
+    else {
+        req.body.position = parseInt(req.body.position)
+    }
+    req.body.createdBy = {
+        account_id: res.locals.user.id
     }
     const product = new Product(req.body) //truyen object req.body vao db
     await product.save();

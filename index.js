@@ -11,6 +11,7 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
 const flash = require('express-flash')
+const moment = require('moment')
 const app = express()
 
 app.use(methodOverride('_method'))
@@ -28,6 +29,7 @@ app.set('views', `${__dirname}/views`)
 app.set('view engine', 'pug')
 //app local variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin
+app.locals.moment = moment
 route(app)
 routeAdmin(app)
 app.use(express.static(`${__dirname}/public`))
