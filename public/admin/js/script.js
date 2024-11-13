@@ -127,21 +127,27 @@ if (formChangeMulti) {
 //end code multi-change
 
 //begin code button change status
-const buttonChangeStatus = checkboxMulti.querySelectorAll("[button-change-status]");
-const formChangeStatus = document.querySelector("#form-change-status");
-console.log(formChangeStatus);
-buttonChangeStatus.forEach(button => {
-    button.addEventListener('click', () => {
-        //lay id va status hien tai
-        const id = button.getAttribute("data-id");
-        const currentStatus = button.getAttribute("data-status")
-        const status = (currentStatus == "active") ? "inactive" : "active";
-        const path = formChangeStatus.getAttribute("data-path");
-        const action = path + `/${id}/${status}?_method=PATCH`;
-        formChangeStatus.action = action;
-        formChangeStatus.submit();
+const buttonChangeStatus = document.querySelectorAll("[button-change-status]")
+//lay ra thuoc tinnh tu dinh nghia
+if (buttonChangeStatus.length > 0) {
+    const formChangeStatus = document.querySelector("#form-change-status");
+    const path = formChangeStatus.getAttribute("data-path")
+    console.log(path)
+    buttonChangeStatus.forEach(button => {
+        button.addEventListener("click", () => {
+            //lay ra trang thai cua button day
+            const currentStatus = button.getAttribute("data-status")
+            const currentId = button.getAttribute("data-id")
+            let statusChange = currentStatus == "active" ? "inactive" : "active";
+            //gui data gom status va id cua button  
+
+            //thay doi status cua tung button thong qua viec gui form
+            let action = path + `/${statusChange}/${currentId}?_method=PATCH`;
+            formChangeStatus.action = action;
+            formChangeStatus.submit(); //submit form nay -> url se thay doi 
+        })
     })
-})
+}
 //end code button change status
 
 //begin code delete item
@@ -208,4 +214,5 @@ if (sort) {
         option.selected = true;
     }
 }
+
 //end sort

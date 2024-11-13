@@ -55,6 +55,7 @@ block main
                             th Vị trí
                             th Trạng thái
                             th Người tạo
+                            th Người cập nhật
                             th Hành động
                     tbody   
                         each item, index in product 
@@ -101,6 +102,12 @@ block main
                                     p #{item.accountFullName}
                                     p 
                                         +formatDateTime(item.createdBy.createdAt)
+                                td 
+                                    -const updatedBy = item.updatedBy.slice(-1)[0]
+                                    if (updatedBy)
+                                        p #{updatedBy.accountFullName}
+                                        p 
+                                            +formatDateTime(item.updatedBy.updatedAt)
                                 td
                                     if (roles.permission.includes("product_detail"))
                                         a(
@@ -131,4 +138,5 @@ block main
         id = "form-delete-item"
         method = "POST"
         )
+        //- script(src = "/admin/js/script.js")s
         script(src = "/admin/js/product.js")

@@ -53,28 +53,58 @@
 //         })
 //     })
 // }
-//change status
-// const buttonChangeStatus = document.querySelectorAll("[button-change-status]")
-// //lay ra thuoc tinnh tu dinh nghia
-// if (buttonChangeStatus.length > 0) {
-//     const formChangeStatus = document.querySelector("#form-change-status");
-//     const path = formChangeStatus.getAttribute("data-path")
-//     console.log(path)
-//     buttonChangeStatus.forEach(button => {
-//         button.addEventListener("click", () => {
-//             //lay ra trang thai cua button day
-//             const currentStatus = button.getAttribute("data-status")
-//             const currentId = button.getAttribute("data-id")
-//             let statusChange = currentStatus == "active" ? "inactive" : "active";
-//             //gui data gom status va id cua button  
-
-//             //thay doi status cua tung button thong qua viec gui form
-//             let action = path + `/${statusChange}/${currentId}?_method=PATCH`;
-//             formChangeStatus.action = action;
-//             formChangeStatus.submit(); //submit form nay -> url se thay doi 
-//         })
+const showAlert = document.querySelector("[show-alert]")
+if (showAlert) {
+    const time = parseInt(showAlert.getAttribute("data-time"));
+    //lay ra nut close alert
+    const closeAlert = showAlert.querySelector("[close-alert]")
+    setTimeout(function() {
+        showAlert.classList.add('alert-hidden')
+    }, time)
+    closeAlert.addEventListener("click", () => {
+        showAlert.classList.add('alert-hidden')
+    })
+}
+// const formChangeMulti = document.querySelector("[form-change-multi]")
+// console.log(formChangeMulti);   //log ra formChangeMulti
+// if (formChangeMulti) {
+//     formChangeMulti.addEventListener('submit', (e) => {
+//         e.preventDefault();
+//         //can dua id cua nhung item duoc checked len form name ids duoi dang mot text
+//         const inputsChecked = checkboxMulti.querySelectorAll("input[name = 'id']:checked")
+//         const inputIds = formChangeMulti.querySelector("input[name = ids]");
+//         const typeChange = e.target.elements.type.value;
+//         if (typeChange == "delete-all") {
+//             const isConfirm = confirm("Bạn có chắc chắn muốn xóa những sản phẩm này không?");
+//             if(!isConfirm) {
+//                 return;
+//             }
+//         }
+//         if (inputsChecked.length > 0 ) {
+//             let ids = [];
+//             inputsChecked.forEach(input => {
+//                 const id = input.value;
+//                 if (typeChange == "change-position") {
+//                     //lay ra position tu input cua inputschecked
+//                     const position = input.closest("tr").querySelector("input[name = 'position']").value;
+//                     ids.push(`${id}-${position}`)
+//                 }
+//                 else {
+//                     ids.push(input.value);
+//                 }
+//             })
+//             console.log(ids);
+//             inputIds.value = ids.join(", ");
+//             formChangeMulti.submit();   
+//         }
+//         else {
+//             alert("Vui lòng chọn ít nhất 1 sản phẩm")
+//         }
 //     })
+    
 // }
+//change status
+
 // checkbox multi
 //code tinh nang xoa san pham
 
@@ -96,18 +126,7 @@
 //         })
 //     })
 // }
-const showAlert = document.querySelector("[show-alert]")
-if (showAlert) {
-    const time = parseInt(showAlert.getAttribute("data-time"));
-    //lay ra nut close alert
-    const closeAlert = showAlert.querySelector("[close-alert]")
-    setTimeout(function() {
-        showAlert.classList.add('alert-hidden')
-    }, time)
-    closeAlert.addEventListener("click", () => {
-        showAlert.classList.add('alert-hidden')
-    })
-}
+
 // const uploadImage = document.querySelector("[upload-image]")
 // if (uploadImage) {
 //     //tim input va preview
