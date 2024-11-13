@@ -69,7 +69,7 @@ block main
                 label(for = "role_id") Phân quyền
                 select(name = "role_id" id = "role_id" class = "form-control")
                     option(disabled) == Chọn ==
-                    each item in roles
+                    each item in rolesAccount
                         option(
                             value = item.id
                             selected = (item.id === account.role_id) ? true : false

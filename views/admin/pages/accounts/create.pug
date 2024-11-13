@@ -66,7 +66,7 @@ block main
                 label(for = "role_id") Phân quyền
                 select(name = "role_id" id = "role_id" class = "form-control")
                     option(disabled) == Chọn ==
-                    each item in roles
+                    each item in rolesAccount
                         option(value = item.id) #{item.title}
             div(class = "form-group form-check form-check-inline")
                 input(
@@ -93,3 +93,4 @@ block main
                     type = "submit"
                     class = "btn btn-primary"
                 ) Tạo mới
+    

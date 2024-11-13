@@ -108,7 +108,6 @@ module.exports.deleteItem = async (req, res) => {
     const id = req.params.id; //lay ra duoc id tren req tu form action
     //delete cac san pham co id do
     await Product.updateOne({ _id: id }, { delete: true,
-        //  deleteAt: new Date() 
         deletedBy: {
             account_id: res.locals.user.id,
             deletedAt: new Date()

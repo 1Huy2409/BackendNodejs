@@ -27,7 +27,7 @@ module.exports.create = async (req, res) => {
     const roles = await Roles.find(find);
     res.render("admin/pages/accounts/create", {
         pageTitle: "Tạo mới danh sách tài khoản",
-        roles: roles
+        rolesAccount: roles
     })
     //truyen data role ra giao dien create
 }
@@ -62,7 +62,7 @@ module.exports.editItem = async (req, res) => {
         const roles = await Roles.find(role);
         res.render("admin/pages/accounts/edit", {
             pageTitle: "Chỉnh sửa thông tin tài khoản",
-            roles: roles,
+            rolesAccount: roles,
             account: account
         })
     }
