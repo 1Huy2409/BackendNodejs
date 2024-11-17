@@ -7,11 +7,18 @@ module.exports.index = async (req, res) => {
         featured: "1",
         status: "active"
     }).limit(3);
-    //hien thi ra san pham noi bat trong danh sach san pham
+    //do ra san pham moi nhat
     const newProductsFeatured = productsHelper.priceNewProducts(productFeatured);
+    const productNew = await Product.find({
+        delete: false,
+        status: "active"
+    }).sort({position: "desc"}).limit(6);
+    const newProductsNew = productsHelper.priceNewProducts(productNew);
+    //hien thi ra san pham noi bat trong danh sach san pham
     res.render("../views/client/pages/home/index", {
         pageTitle: "Trang chủ", //truyen da ta sang file pug roi render file pug
-        productFeatured: newProductsFeatured
+        productFeatured: newProductsFeatured,
+        productNew: newProductsNew,
     }
     )
 }
