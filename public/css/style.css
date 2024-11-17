@@ -14,3 +14,103 @@ a {
 .permission_th {
     margin-left: 20px;
 }
+/* Header */
+.header {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+  }
+  
+  /* .header .inner-logo img {
+    max-height: 50px;
+    max-width: 100%;
+  } */
+.header .inner-menu > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+  
+  .header .inner-menu > ul > li {
+    margin-left: 20px;
+  }
+  
+  /* Hover Navigation Menu Tab */
+  .header .inner-menu > ul > li a {
+    position: relative;
+    display: block;
+    text-transform: uppercase;
+    margin: 20px 0;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #262626;
+    font-family: sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    transition: 0.5s;
+    z-index: 1;
+  }
+  
+  .header .inner-menu > ul > li a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 2px solid #262626;
+    border-bottom: 2px solid #262626;
+    transform: scaleY(2);
+    opacity: 0;
+    transition: 0.3s;
+  }
+  
+  .header .inner-menu > ul > li a::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #262626;
+    transform: scale(0);
+    opacity: 0;
+    transition: 0.3s;
+    z-index: -1;
+  }
+  .product-item {
+    position: relative;
+  }
+  .product-item .inner-image {
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+  }
+  .product-item .inner-featured {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: green;
+    color: white;
+    padding: 3px 6px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+  .header .inner-menu > ul > li a:hover {
+    color: #fff;
+  }
+  
+  .header .inner-menu > ul > li a:hover::before {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  
+  .header .inner-menu > ul > li a:hover::after {
+    transform: scaleY(1);
+    opacity: 1;
+  }

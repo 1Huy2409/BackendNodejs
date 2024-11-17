@@ -41,6 +41,25 @@ block main
                     if (category)
                         +select-tree(category)
             div(class = "form-group")
+                input(
+                    type = "radio"
+                    class = "form-check-input"
+                    id = "statusFeatured"
+                    name = "featured"
+                    value = "1"
+                )
+                label(for = "statusActive" class = "form-check-label") Nổi bật
+            div(class = "form-group")
+                input(
+                    type = "radio"
+                    class = "form-check-input"
+                    id = "statusNonFeatured"
+                    name = "featured"
+                    value = "0"
+                    checked
+                )
+                label(for = "statusInActive" class = "form-check-label") Không nổi bật
+            div(class = "form-group")
                 label(for = "price") Giá 
                 input(
                     type = "number"

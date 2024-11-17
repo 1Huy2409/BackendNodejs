@@ -52,13 +52,19 @@ module.exports.create = async (req, res) => {
     })
 }
 module.exports.createPost = async (req, res) => {
-    if (req.body.position == "") {
-        let countDocuments = await ProductsCategory.countDocuments();
-        req.body.position = parseInt(countDocuments + 1);
+    const permission = res.locals.role.permission;
+    if (permission.includes("product-category_create")) {
+        if (req.body.position == "") {
+            let countDocuments = await ProductsCategory.countDocuments();
+            req.body.position = parseInt(countDocuments + 1);
+        }
+        const record = new ProductsCategory(req.body);
+        await record.save();
+        res.redirect(`${systemConfig.prefixAdmin}/products-category`);
     }
-    const record = new ProductsCategory(req.body);
-    await record.save();
-    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+    else {
+        res.send("403");
+    }
 }
 
 module.exports.changeMulti = async (req, res) => {

@@ -1,4 +1,5 @@
 const Product = require("../../models/product.model")
+const productsHelper = require("../../helper/product")
 module.exports.index = async (req, res) => {
     const find = {
         delete: false,
@@ -9,9 +10,10 @@ module.exports.index = async (req, res) => {
     // const newProducts = product.map(item => {
     //     return 
     // })
+    const newProducts = productsHelper.priceNewProducts(product);
     res.render("../views/client/pages/products/index", {
         pageTitle: "Trang danh sách sản phẩm",
-        product: product
+        product: newProducts
     })
 }
 module.exports.detail = async (req, res) => {

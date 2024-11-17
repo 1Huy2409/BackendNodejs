@@ -1,4 +1,5 @@
-header .header
+include ../mixins/sub-menu.pug
+header.header
     .container 
         .row.align-items-center     
             .col-3 
@@ -7,8 +8,10 @@ header .header
                         img(src = "/images/me-va-be.jpg")
             .col-9 
                 .inner-menu 
+                    -const path = "products"
                     ul 
                         li 
                             a(href= "/") Trang chủ
-                        li 
+                        li(class = "sub-menu")
                             a(href = "/products") Sản phẩm
+                            +sub-menu(layoutProductsCategory, path)
