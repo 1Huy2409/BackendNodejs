@@ -34,7 +34,7 @@ module.exports.category = async (req, res) => {
         return allSubs;
     }
     const listSubCategory = await getSubCategory(category.id);
-    const listSubCategoryId = listSubCategory.map((item)=> item.id);
+    const listSubCategoryId = listSubCategory.map((item) => item.id);
     const products = await Product.find({
         product_category_id: { $in: [category.id, ...listSubCategoryId] },
         status: "active",
@@ -47,14 +47,31 @@ module.exports.category = async (req, res) => {
     })
 }
 module.exports.detail = async (req, res) => {
-    const slug = req.params.slug;
-    const find = {
-        delete: false,
-        slug: slug
+
+    try {
+        const find = {
+            delete: false,
+            slug: req.params.slugProduct,
+            status: "active"
+        }
+        const product = await Product.findOne(find);
+        if (product.product_category_id) {
+            //ton tai danh muc cho san pham 
+            const category = await ProductsCategory.findOne({
+                _id: product.product_category_id,
+                status: "active",
+                delete: false
+            })
+            product.category = category;
+        }
+        //tinh lai gia moi cho mot san pham o route detail products
+        product.priceNew = productsHelper.priceNewProduct(product);
+        res.render('client/pages/products/detail', {
+            pageTitle: product.title,
+            product: product
+        })
     }
-    const product = await Product.findOne(find);
-    res.render('client/pages/products/detail', {
-        pageTitle: product.title,
-        product: product
-    })
+    catch (error) {
+        res.redirect("/products");
+    }
 }
