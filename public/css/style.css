@@ -240,3 +240,72 @@ hr {
   border-bottom: 2px solid #ddd;
   padding-bottom: 5px;
 }
+/* Căn chỉnh chung */
+.col-5 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tùy chỉnh form tìm kiếm */
+.col-5 form {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex; /* Đặt các phần tử trong form nằm ngang */
+}
+
+/* Tùy chỉnh input */
+.col-5 form .form-control {
+  flex: 1; /* Input chiếm toàn bộ không gian còn lại */
+  border: 2px solid #007bff;
+  border-right: none; /* Gắn liền với nút */
+  border-radius: 20px 0 0 20px;
+  padding: 10px 15px;
+  font-size: 16px;
+}
+
+/* Tùy chỉnh nút tìm kiếm */
+.col-5 form .btn {
+  flex: 0 0 auto; /* Nút không co giãn */
+  width: 100px; /* Đặt chiều rộng nhỏ hơn */
+  background-color: #007bff;
+  color: #fff;
+  border: 2px solid #007bff;
+  border-radius: 0 20px 20px 0;
+  padding: 8px 10px; /* Kích thước nhỏ hơn */
+  font-size: 14px; /* Phông chữ nhỏ hơn */
+  transition: background-color 0.3s ease;
+}
+
+/* Hiệu ứng hover cho nút */
+.col-5 form .btn:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+[show-alert] {
+  position: fixed;
+  top: 70px;
+  right: 15px;
+  z-index: 999;
+}
+[show-alert].alert-hidden {
+  animation-duration: 0.5s;
+  animation-name: alert-hidden;
+  animation-fill-mode: both;
+}
+@keyframes alert-hidden {
+  from {
+      right: 15px;
+  }
+  to {
+      right: -100%;
+      display: none;
+  }
+}
+[show-alert] [close-alert] {
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 4px 8px;
+}

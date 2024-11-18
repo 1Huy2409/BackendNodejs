@@ -23,16 +23,16 @@ app.use(flash());
 //end flash
 //begin tinymce
 app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+app.set('views', `${__dirname}/views`)
+app.use(express.static(`${__dirname}/public`))
 //end tinymce
 database.connect();
-app.set('views', `${__dirname}/views`)
 app.set('view engine', 'pug')
 //app local variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin
 app.locals.moment = moment
 route(app)
 routeAdmin(app)
-app.use(express.static(`${__dirname}/public`))
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)
 })

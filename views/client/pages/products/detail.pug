@@ -1,13 +1,15 @@
 extend ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
 block main 
+    +alert-success(3000)
     .product-detail     
         .container.my-5 
             .row 
                 .col-6 
                     .inner-thumb 
                         img(src = product.thumbnail, alt = product.title)
-                .col-6 
+                .col-6  
                     if (product.title)
                         h1(class = "inner-title") #{product.title}
                     if (product.category)
