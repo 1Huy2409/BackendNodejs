@@ -63,3 +63,25 @@ module.exports.index = async (req, res) => {
         cartDetail: cart
     })
 }
+module.exports.delete = async (req, res) => {
+    const cartId = req.cookies.cartId;
+    const productId = req.params.productId;
+    const cart = await Cart.findOne({
+        _id: cartId
+    })
+    //xoa san pham bang cach dung ham filter
+    // const newProducts = cart.products.filter(item => item.product_id != productId);
+    // await Cart.updateOne({_id: cartId,
+    //     products: newProducts
+    // })
+    
+    //xoa san pham bang cach pull
+    await Cart.updateOne({
+        _id: cartId
+    }, {
+        $pull: {products: {product_id: productId}}
+    })
+    req.flash("success", "Đã xóa sản phẩm thành công!");
+    res.redirect("back");
+}
+//xoa san pham trong gio hang 
