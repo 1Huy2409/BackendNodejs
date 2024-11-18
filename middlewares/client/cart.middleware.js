@@ -11,7 +11,13 @@ module.exports.cartId = async (req, res, next) => { //kiem tra xem token khi vao
         //set thoi gian het han cho cartId
     }
     else {
-        //lay ra gio hang da ton tai
+        //lay ra thong tin gio hang hien tai
+        const cart = await Cart.findOne({
+            _id: req.cookies.cartId
+        })
+        cart.totalQuantity = cart.products.reduce((sum, item)=> sum + item.quantity, 0);
+        
+        res.locals.miniCart = cart;
     }
     next();
 }
