@@ -84,4 +84,15 @@ module.exports.delete = async (req, res) => {
     req.flash("success", "Đã xóa sản phẩm thành công!");
     res.redirect("back");
 }
+module.exports.update = async (req, res) => {
+    const productId = req.params.productId;
+    const quantity = req.params.quantity; //quantity luc nay da thay doi thanh quantity moi 
+    const cartId = req.cookies.cartId;
+    await Cart.updateOne(
+        {_id: cartId,"products.product_id": productId}, {
+            $set : {"products.$.quantity": quantity}
+        }
+    )
+    res.redirect("back");
+}
 //xoa san pham trong gio hang 

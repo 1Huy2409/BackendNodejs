@@ -42,7 +42,7 @@ block main
                                                 name="quantity"
                                                 min="1"
                                                 value=item.quantity
-                                                item-id=item.product_id
+                                                product-id=item.product_id
                                                 style="width: 60px"
                                             )
                                         td #{item.totalPrice} $
@@ -60,4 +60,4 @@ block main
                         a(href=`/checkout` class="btn btn-success") THANH TOÁN
             else 
                 p Không có sản phẩm nào trong giỏ hàng
-    script(src="/js/script.js") 
+    script(src="/js/cart.js") 
