@@ -1,6 +1,7 @@
 // [POST] /cart/add/:productId
 const Product = require("../../models/product.model")
 const Cart = require("../../models/cart.model")
+const productHelper = require("../../helper/product")
 module.exports.addPost = async (req, res) => {
     const productId = req.params.productId;
     const productQuantity = parseInt(req.body.quantity);
@@ -36,4 +37,29 @@ module.exports.addPost = async (req, res) => {
     }
     req.flash("success", "Đã thêm sản phẩm vào giỏ hàng");
     res.redirect("back");
+}
+module.exports.index = async (req, res) => {
+    //truy van ra thong tin cua gio hang 
+    const cartId = req.cookies.cartId;
+    const cart = await Cart.findOne({
+        _id: cartId
+    })
+    console.log(cart);
+    if (cart.products.length > 0) {
+        for (let product of cart.products) {
+            const productId = product.product_id;
+            const productInfo = await Product.findOne({
+                _id: productId
+            }).select("title thumbnail slug price discountPercentage")
+            productInfo.priceNew = productHelper.priceNewProduct(productInfo);
+            product.totalPrice = product.quantity * productInfo.priceNew
+            product.productInfo = productInfo;
+        }
+    }
+    //tinh tong tien cua ca gio hang
+    cart.totalPrice = cart.products.reduce((sum, item)=>sum + item.totalPrice,0)
+    res.render("client/pages/cart/index", {
+        pageTitle: "Trang giỏ hàng",
+        cartDetail: cart
+    })
 }
