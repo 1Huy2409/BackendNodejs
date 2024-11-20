@@ -93,6 +93,6 @@ module.exports.update = async (req, res) => {
             $set : {"products.$.quantity": quantity}
         }
     )
-    res.redirect("back");
+    res.redirect(`/checkout/success/${order.id}`);
 }
 //xoa san pham trong gio hang 
