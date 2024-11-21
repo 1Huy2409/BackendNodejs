@@ -23,4 +23,14 @@ router.get('/logout', controller.logout);
 //router forgot password client account
 router.get('/password/forgot', controller.forgotPassword);
 router.post('/password/forgot', controller.forgotPasswordPost);
+
+router.get('/password/otp', controller.otpPassword);
+router.post('/password/otp', controller.otpPasswordPost);
+router.get('/password/reset',
+    controller.resetPassword
+);
+router.post('/password/reset', 
+    validate.resetPassword, 
+    controller.resetPasswordPost
+);
 module.exports = router;    
