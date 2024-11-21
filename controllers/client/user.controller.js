@@ -127,3 +127,13 @@ module.exports.logout = async (req, res) => {
     res.clearCookie('tokenUser');
     res.redirect("/");
 }
+module.exports.infoUser = async (req, res) => {
+    const user = await User.findOne({
+        tokenUser: req.cookies.tokenUser
+    }).select("-password")
+    console.log(user);
+    res.render("client/pages/user/infoUser", {
+        pageTitle: "Thông tin cá nhân",
+        user: user
+    })
+}

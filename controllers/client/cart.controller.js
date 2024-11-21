@@ -13,7 +13,6 @@ module.exports.addPost = async (req, res) => {
     if (existProductInCart) {
         //cap nhat lai quantity moi cho product
         const quantityNew = productQuantity + existProductInCart.quantity;
-        console.log(quantityNew);
         await Cart.updateOne(
             {_id: cartId,"products.product_id": productId}, {
                 $set : {"products.$.quantity": quantityNew}
@@ -44,7 +43,6 @@ module.exports.index = async (req, res) => {
     const cart = await Cart.findOne({
         _id: cartId
     })
-    console.log(cart);
     if (cart.products.length > 0) {
         for (let product of cart.products) {
             const productId = product.product_id;

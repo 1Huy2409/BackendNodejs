@@ -33,4 +33,5 @@ router.post('/password/reset',
     validate.resetPassword, 
     controller.resetPasswordPost
 );
+router.get('/info', controller.infoUser);
 module.exports = router;    
