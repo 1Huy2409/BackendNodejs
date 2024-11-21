@@ -1,4 +1,5 @@
 const User = require("../../models/user.model");
+const Cart = require("../../models/cart.model")
 const ForgotPassword = require('../../models/forgot-password.model');
 const generateHelper = require("../../helper/generate")
 const sendEmailHelper = require("../../helper/sendMail");
@@ -34,7 +35,7 @@ module.exports.loginPost = async (req, res) => {
         delete: false,
         status: "active"
     })
-    if (!user) { 
+    if (!user) {
         req.flash("error", "Tài khoản này không tồn tại");
         res.redirect("back");
         return;
@@ -45,6 +46,19 @@ module.exports.loginPost = async (req, res) => {
         return;
     }
     res.cookie('tokenUser', user.tokenUser);
+    //luu user.id vao userId cua cart collection
+    const cartId = req.cookies.cartId;
+    const cart = await Cart.findOne({
+        user_id: user.id
+    })
+    if (cart) {
+        res.cookie("cartId", cart.id);
+    }
+    else {
+        await Cart.updateOne(
+            { _id: cartId }, { user_id: user.id }
+        )
+    }
     res.redirect("/");
 }
 module.exports.forgotPassword = async (req, res) => {
@@ -60,7 +74,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
         delete: false
     });
 
-    if(!user) {
+    if (!user) {
         req.flash("error", "Email không tồn tại!");
         res.redirect('back');
         return;
@@ -77,7 +91,7 @@ module.exports.forgotPasswordPost = async (req, res) => {
     const forgotPassword = new ForgotPassword(objectForgotPassword);
     await forgotPassword.save();
     const subject = "Email xác minh mật khẩu";
-    const html  = `Mã OTP để thay đổi mật khẩu của bạn là <b>${otp}</b>. Mã OTP này chỉ có hiệu lực 3 phút!`;
+    const html = `Mã OTP để thay đổi mật khẩu của bạn là <b>${otp}</b>. Mã OTP này chỉ có hiệu lực 3 phút!`;
     sendEmailHelper.sendEmail(email, subject, html);
     res.redirect(`/user/password/otp?email=${email}`);
 }
@@ -99,7 +113,7 @@ module.exports.otpPasswordPost = async (req, res) => {
     if (!forgotPassword) {
         req.flash("error", "Mã otp không hợp lệ, vui lòng nhập lại!");
         res.redirect("back");
-        return; 
+        return;
     }
     const user = await User.findOne({
         email: email
@@ -115,23 +129,23 @@ module.exports.resetPassword = async (req, res) => {
 module.exports.resetPasswordPost = async (req, res) => {
     const password = req.body.password;
     const user = await User.findOne(
-        {tokenUser: req.cookies.tokenUser},
+        { tokenUser: req.cookies.tokenUser },
     )
     await user.updateOne(
-        {tokenUser: req.cookies.tokenUser},
-        {password: md5(password)}
+        { tokenUser: req.cookies.tokenUser },
+        { password: md5(password) }
     )
     res.redirect("/");
 }
 module.exports.logout = async (req, res) => {
     res.clearCookie('tokenUser');
+    res.clearCookie('cartId');
     res.redirect("/");
 }
 module.exports.infoUser = async (req, res) => {
     const user = await User.findOne({
         tokenUser: req.cookies.tokenUser
     }).select("-password")
-    console.log(user);
     res.render("client/pages/user/infoUser", {
         pageTitle: "Thông tin cá nhân",
         user: user

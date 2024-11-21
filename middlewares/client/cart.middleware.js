@@ -8,7 +8,6 @@ module.exports.cartId = async (req, res, next) => { //kiem tra xem token khi vao
         await cart.save();
         const expiresCookie = 1000 * 60 * 60 * 24 * 365;
         res.cookie("cartId", cart.id, { expires: new Date(Date.now() + expiresCookie)})//luu cartId vao cookies
-        //set thoi gian het han cho cartId
     }
     else {
         //lay ra thong tin gio hang hien tai

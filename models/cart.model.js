@@ -3,7 +3,7 @@ var slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
 const cartsSchema = new mongoose.Schema(
     {
-        user_id: String, //user cua khach hang
+        user_id: String, 
         products: [
             {
                 product_id: String, 
@@ -12,7 +12,7 @@ const cartsSchema = new mongoose.Schema(
         ]
     },
     {
-        timestamps: true //trong timestamps bao gom updateAt va deleteAt
+        timestamps: true 
     }
 )
 const Cart = mongoose.model('Cart', cartsSchema, "carts")
