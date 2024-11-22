@@ -133,6 +133,20 @@ block main
                 each item in records 
                     td(class = "text-center")
                         input(type = "checkbox")
+            //- cai dat chung, rieng, ...
+            tr
+                td(colspan = "4")
+                    b Cài đặt
+            tr(data-name = "setting-general")
+                td Cài đặt chung 
+                each item in records 
+                    td(class = "text-center")
+                        input(type = "checkbox")
+            tr(data-name = "setting-advance")
+                td Cài đặt nâng cao
+                each item in records 
+                    td(class = "text-center")
+                        input(type = "checkbox")
 
     form(
         id = "form-change-permission"
