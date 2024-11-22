@@ -2,3 +2,53 @@ extends ../../layouts/default.pug
     
 block main 
     h1 Trang tổng quan
+    if (user.avatar)
+        img(src = user.avatar width = "150px" class = "mb-3")
+    else 
+        img(src = "/admin/images/avatar.png" width = "150px" class = "mb-3")
+    
+    if (user.fullName)
+        p Họ tên: <b>#{user.fullName} </b>
+
+    if (user.email)
+        p Họ tên: <b>#{user.email} </b>
+    
+    if (user.phone)
+        p Họ tên: <b>#{user.phone} </b>
+    
+    p 
+        span Trạng thái: 
+        span 
+            <b> #{user.status == "active" ? "Hoạt động": "Dừng hoạt động"} </b>
+
+    if (roles.title) 
+        p Phân quyền: <b>#{roles.title} </b>
+    .row
+        .col-6 
+            .card.mb-4 
+                .card-header Danh mục sản phẩm
+                .cart-body 
+                    p Số lượng: <b>#{objectDashboard.productCategory.total}</b>
+                    p Hoạt động: <b>#{objectDashboard.productCategory.active}</b>
+                    p Dừng hoạt động: <b>#{objectDashboard.productCategory.inactive}</b>
+        .col-6 
+            .card.mb-4 
+                .card-header Sản phẩm
+                .cart-body 
+                    p Số lượng: <b>#{objectDashboard.product.total}</b>
+                    p Hoạt động: <b>#{objectDashboard.product.active}</b>
+                    p Dừng hoạt động: <b>#{objectDashboard.product.inactive}</b>
+        .col-6 
+            .card.mb-4 
+                .card-header Tài khoản admin
+                .cart-body 
+                    p Số lượng: <b>#{objectDashboard.account.total}</b>
+                    p Hoạt động: <b>#{objectDashboard.account.active}</b>
+                    p Dừng hoạt động: <b>#{objectDashboard.account.inactive}</b>
+        .col-6 
+            .card.mb-4 
+                .card-header Tài khoản client
+                .cart-body 
+                    p Số lượng: <b>#{objectDashboard.user.total}</b>
+                    p Hoạt động: <b>#{objectDashboard.user.active}</b>
+                    p Dừng hoạt động: <b>#{objectDashboard.user.inactive}</b>
