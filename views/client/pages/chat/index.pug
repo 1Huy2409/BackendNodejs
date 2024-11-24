@@ -7,7 +7,7 @@ block main
                 +box-head("Nhắn tin trò chuyện")
         .row 
             .col-12 
-                .chat 
+                .chat(my-id=user.id)
                     .inner-body 
                         each chat of chats
                             div(class = (chat.user_id == user.id) ? "inner-outgoing" : "inner-incoming")

@@ -3,6 +3,8 @@ const User = require("../../models/user.model")
 module.exports.chat = async (req, res) => {
     //render ra giao dien chat
     const userId = res.locals.user.id;
+    const fullName = res.locals.user.fullName;
+    //begin socketio
     _io.once("connection", (socket) => {
         console.log("a user connected!", socket.id)
         socket.on("CLIENT_SEND_MESSAGE", async (content) => {
@@ -11,8 +13,14 @@ module.exports.chat = async (req, res) => {
                 content: content
             })
             await chat.save();
+            _io.emit("SERVER_RETURN_MESSAGE", {
+                fullName: fullName,
+                userId: userId,
+                content: content
+            })
         })
     })
+    //end socketio
     const chats = await Chat.find({});
     for (const chat of chats) {
         const infoUser = await User.findOne({

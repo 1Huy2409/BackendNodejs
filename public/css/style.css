@@ -404,6 +404,7 @@ hr {
 
 .inner-body {
   flex-grow: 1;
+  max-height: 450px;
   overflow-y: auto;
   padding: 15px;
 }
