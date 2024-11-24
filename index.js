@@ -13,7 +13,13 @@ const session = require('express-session')
 const flash = require('express-flash')
 const moment = require('moment')
 const app = express()
-
+//socketio
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+global._io = io;
+//end socketio
 app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({ extended: false }))
 //flash
@@ -33,6 +39,6 @@ app.locals.prefixAdmin = systemConfig.prefixAdmin
 app.locals.moment = moment
 route(app)
 routeAdmin(app)
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`App listening on port ${port}`)
 })

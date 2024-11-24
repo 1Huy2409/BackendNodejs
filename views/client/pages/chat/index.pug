@@ -1,0 +1,41 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug   
+block main
+    .container.my-3 
+        .row
+            .col-12 
+                +box-head("Nhắn tin trò chuyện")
+        .row 
+            .col-12 
+                .chat 
+                    .inner-body 
+                        .inner-incoming 
+                            .inner-name Nobita
+                            .inner-content 
+                                | Hello Nobita, cậu có nhà không?
+                        .inner-outgoing 
+                            .inner-content 
+                                | Tớ có ở nhà nè Doraemon 
+                        .inner-incoming 
+                            .inner-name Nobita
+                            .inner-content 
+                                | Vậy cậu qua làm bài giúp tớ được không?
+                        .inner-outgoing
+                            .inner-content 
+                                | Oke, tớ sẽ qua ngay! 
+                        .inner-incoming 
+                            .inner-name Nobita
+                            .inner-content 
+                                | Cút về đi Doraeheo
+                    .inner-foot     
+                        form(
+                            class="inner-form"
+                            action=""
+                        )
+                            input(
+                                type="text"
+                                placeholder="Nhập nội dung..."
+                                name="content"
+                            )
+                            button 
+                                i.fa.fa-paper-plane(aria-hidden='true')
