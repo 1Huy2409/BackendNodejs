@@ -18,7 +18,13 @@ module.exports.registerPost = async (req, res) => {
         return;
     }
     req.body.password = md5(req.body.password);
-    const user = new User(req.body);
+    const tokenUser = generateHelper.generateRandomString(20);
+    const user = new User({
+        tokenUser: tokenUser,
+        email:req.body.email,
+        fullName: req.body.fullName,
+        password: req.body.password
+    });
     await user.save();
     res.cookie('tokenUser', user.tokenUser);
     res.redirect("/");
@@ -131,10 +137,7 @@ module.exports.resetPasswordPost = async (req, res) => {
     const user = await User.findOne(
         { tokenUser: req.cookies.tokenUser },
     )
-    await user.updateOne(
-        { tokenUser: req.cookies.tokenUser },
-        { password: md5(password) }
-    )
+    user.password = md5(password);
     res.redirect("/");
 }
 module.exports.logout = async (req, res) => {

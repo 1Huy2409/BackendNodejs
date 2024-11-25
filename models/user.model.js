@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
         password: String,
         tokenUser: {
             type: String,
-            default: generate.generateRandomString(20)
+            unique: true
         },  //token là một chuỗi bất kì, đăng nhập thành công thì lưu token bên phía người dùng
         phone: String,
         avatar: String,

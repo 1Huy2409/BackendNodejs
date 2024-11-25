@@ -30,7 +30,7 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
     div.innerHTML = `
         ${htmlFullName}
         <div class = "inner-content">${data.content}</div>
-    `;  
+    `;
     body.appendChild(div);
     body.scrollTop = body.scrollHeight;
 })
@@ -43,3 +43,24 @@ if (bodyChat) {
 }
 //end scroll chat
 
+//show icon chat
+const buttonIcon = document.querySelector(".button-icon")
+if (buttonIcon) {
+    const tooltip = document.querySelector(".tooltip");
+    Popper.createPopper(buttonIcon, tooltip)
+    buttonIcon.onclick = () => {
+        tooltip.classList.toggle('shown')
+    }
+}
+
+//insert icon into input form
+const emojiPicker = document.querySelector("emoji-picker");
+if (emojiPicker) {
+    const input = document.querySelector(".chat .inner-form input[name = 'content']");
+    emojiPicker.addEventListener("emoji-click", (event) => {
+        console.log(event.detail);
+        const icon = event.detail.unicode
+        input.value += icon;
+    })
+}
+//end show icon chat    

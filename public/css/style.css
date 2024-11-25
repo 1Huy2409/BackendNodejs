@@ -502,4 +502,12 @@ hr {
 .inner-form i {
   font-size: 20px; /* Tăng kích thước icon cho nút gửi */
 }
-
+/* emoji icon */
+.tooltip {
+  visibility: hidden;
+}
+.tooltip.shown {
+  visibility: visible;
+  opacity: 1;
+}
+/* end emoji icon */

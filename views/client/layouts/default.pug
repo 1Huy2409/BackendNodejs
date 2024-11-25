@@ -11,7 +11,10 @@ html
     include ../partials/footer.pug
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    //- socketio
     <script src="/socket.io/socket.io.js"></script>   
     <script src = "../../js/script.js"></script>
     <script src = "../../js/socket.js"></script>
-    <script src = "../../js/chat.js"></script>
+    <script type="module" src = "../../js/chat.js"></script>
+    //- end socketio
+    <script type = "module" src = "https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
