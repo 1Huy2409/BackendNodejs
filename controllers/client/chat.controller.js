@@ -19,6 +19,15 @@ module.exports.chat = async (req, res) => {
                 content: content
             })
         })
+        //typing event
+        socket.on("CLIENT_SEND_TYPING", async(type) => {
+            socket.broadcast.emit("SERVER_RETURN_TYPING", {
+                fullName: fullName,
+                userId: userId,
+                type: type
+            })
+        })
+        //end typing event
     })
     //end socketio
     const chats = await Chat.find({});
