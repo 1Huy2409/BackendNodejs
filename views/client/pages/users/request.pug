@@ -5,11 +5,11 @@ block main
         include ../../partials/list-btn-user.pug
         .row
             .col-12 
-                +box-head("Danh sách người dùng")
+                +box-head("Lời mời đã gửi")
         .row 
             .col-6 
                 each user in users
-                    div(class = "box-user")
+                    div(class = "box-user add")
                         div(class = "inner-avatar")
                             img(    
                                 src = (user.avatar ? user.avatar : "https://png.pngtree.com/element_our/20200610/ourmid/pngtree-default-avatar-image_2237213.jpg")
