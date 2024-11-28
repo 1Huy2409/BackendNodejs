@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             default: "active"
         },
+        statusOnline: String,
         requestFriends: Array, 
         acceptFriends: Array, 
         friendList: [
