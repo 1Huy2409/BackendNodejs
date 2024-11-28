@@ -43,3 +43,13 @@ if (listBtnAcceptFriend.length > 0) {
         })
     })
 }
+
+// SERVER_RETURN_LENGTH_ACCEPT_FRIEND
+socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
+    const badgeUserAccept = document.querySelector(`[badge-users-accept = '${data.userIdB}']`);
+    if (badgeUserAccept) {
+        //set lai gia tri innerHtml 
+        badgeUserAccept.innerHTML = `${data.acceptFriendLength}`;
+    }
+})
+// END SERVER_RETURN_LENGTH_ACCEPT_FRIEND
