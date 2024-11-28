@@ -6,8 +6,8 @@ block main
         .row
             .col-12 
                 +box-head("Lời mời kết bạn")
-        .row 
-            .col-6 
+        .row(data-users-accept = user.id)
+            .col-6
                 each user in users
                     div(class = "box-user")
                         div(class = "inner-avatar")

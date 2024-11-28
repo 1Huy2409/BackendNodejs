@@ -53,3 +53,98 @@ socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
     }
 })
 // END SERVER_RETURN_LENGTH_ACCEPT_FRIEND
+
+// SERVER_RETURN_INFO_ACCEPT_FRIEND
+socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
+    const dataUserAccept = document.querySelector(`[data-users-accept = "${data.userIdB}"]`);
+    if (dataUserAccept) {
+        const boxAccept = document.createElement("div");
+        boxAccept.classList.add("col-6");
+        boxAccept.setAttribute("user-id", `${data.infoUserA._id}`)
+        let string = `
+            <div class="box-user">
+                <div class="inner-avatar">
+                    <img 
+                        src="${data.infoUserA.avatar ? data.infoUserA.avatar : 'https://png.pngtree.com/element_our/20200610/ourmid/pngtree-default-avatar-image_2237213.jpg'}" 
+                        alt="${data.infoUserA.fullName}" 
+                    />
+                </div>
+                <div class="inner-info">
+                    <div class="inner-name">${data.infoUserA.fullName}</div>
+                    <div class="inner-buttons">
+                        <button 
+                            class="btn btn-sm btn-primary mr-1" 
+                            btn-accept-friend="${data.infoUserA._id}">
+                            Chấp nhận
+                        </button>
+                        <button 
+                            class="btn btn-sm btn-primary mr-1" 
+                            btn-refuse-friend= "${data.infoUserA._id}">
+                            Xóa
+                        </button>
+                        <button 
+                            class="btn btn-sm btn-primary mr-1" 
+                            btn-deleted-friend 
+                            disabled>
+                            Đã xóa
+                        </button>
+                        <button 
+                            class="btn btn-sm btn-primary mr-1" 
+                            btn-accepted-friend 
+                            disabled>
+                            Đã chấp nhận
+                        </button>
+                    </div>
+                </div>
+            </div>`
+        boxAccept.innerHTML = string;
+        dataUserAccept.appendChild(boxAccept);
+        //bat su kien cho nut chap nhan
+        const btnAcceptFriend = boxAccept.querySelector("[btn-accept-friend]");
+        if (btnAcceptFriend) {
+            btnAcceptFriend.addEventListener("click", () => {
+                btnAcceptFriend.closest(".box-user").classList.add("accepted");
+                const userIdA = btnAcceptFriend.getAttribute("btn-accept-friend");
+                socket.emit("CLIENT_ACCEPT_FRIEND", userIdA);
+            })
+        }
+        //bat su kien cho nut xoa ket ban
+        const btnRefuseFriend = boxAccept.querySelector("[btn-refuse-friend]");
+        if (btnRefuseFriend) {
+            btnRefuseFriend.addEventListener("click", ()=> {
+                btnRefuseFriend.closest(".box-user").classList.add("refuse");
+                const userIdA = btnRefuseFriend.getAttribute("btn-refuse-friend");
+                socket.emit("CLIENT_REFUSE_FRIEND", userIdA);
+            })
+        }
+    }
+})
+// END SERVER_RETURN_INFO_ACCEPT_FRIEND
+
+
+// SERVER_RETURN_ID_CANCEL_FRIEND
+socket.on("SERVER_RETURN_ID_CANCEL_FRIEND", (data) => {
+    const dataUserAccept = document.querySelector(`[data-users-accept = "${data.userIdB}"]`);
+    if (dataUserAccept) {
+        //tim boxAccept co user-id = data.userIdA
+        const boxAccept = dataUserAccept.querySelector(`[user-id = "${data.userIdA}"]`);
+        if (boxAccept) {
+            dataUserAccept.removeChild(boxAccept);
+            socket.emit("CLIENT_CANCEL_FRIEND", data.userIdA);
+        }
+    }
+})
+// END SERVER_RETURN_ID_CANCEL_FRIEND
+
+// SERVER_RETURN_ID_ACCEPT_FRIEND
+socket.on("SERVER_RETURN_ID_ACCEPT_FRIEND", (data) => {
+    const dataNotUserAccept = document.querySelector(`[data-not-user-accept = "${data.userIdB}"]`);
+    if (dataNotUserAccept) {
+        const boxRemove = dataNotUserAccept.querySelector(`[user-id = "${data.userIdA}"]`);
+        if (boxRemove) {
+            dataNotUserAccept.removeChild(boxRemove);
+            socket.emit("CLIENT_ADD_FRIEND", data.userIdB);
+        }
+    }
+})
+// END SERVER_RETURN_ID_ACCEPT_FRIEND

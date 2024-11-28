@@ -37,6 +37,21 @@ module.exports = (res) => {
                     acceptFriendLength: infoUserB.acceptFriends.length
                 }
             )
+            const infoUserA = await User.findOne({
+                _id: myUserId
+            }).select("id avatar fullName")
+            socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND", 
+                {
+                    infoUserA: infoUserA,
+                    userIdB: infoUserB.id
+                }
+            )
+            socket.broadcast.emit("SERVER_RETURN_ID_ACCEPT_FRIEND", 
+                {
+                    userIdA: infoUserA.id,
+                    userIdB: userId
+                }
+            )
         })
         //socket cancel request friend from client to server
         socket.on("CLIENT_CANCEL_FRIEND", async (userId) => {
@@ -69,12 +84,19 @@ module.exports = (res) => {
             const infoUserB = await User.findOne({
                 _id: userId
             })
+            const infoUserA = await User.findOne({
+                _id: myUserId
+            })
             socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", 
                 {
                     userIdB: infoUserB.id,
                     acceptFriendLength: infoUserB.acceptFriends.length
                 }
             )
+            socket.broadcast.emit("SERVER_RETURN_ID_CANCEL_FRIEND", {
+                userIdA: infoUserA.id,
+                userIdB: infoUserB.id
+            })
         })
         //socket refuse request from client to server
         socket.on("CLIENT_REFUSE_FRIEND", async (userId) => {
