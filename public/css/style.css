@@ -648,3 +648,12 @@ hr {
 .box-user.accepted [btn-accept-friend] {
   display: none;
 }
+/* css statusOnline */
+.box-user .inner-status {
+  font-size: 12px;
+  opacity: 0;
+  color: #28a745;
+}
+.box-user .inner-status[status = "Online"] {
+  opacity: 1;
+}

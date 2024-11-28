@@ -27,6 +27,13 @@ module.exports.registerPost = async (req, res) => {
     });
     await user.save();
     res.cookie('tokenUser', user.tokenUser);
+    //co tokenUser cap nhat status
+    await User.updateOne(
+        {tokenUser: user.tokenUser},
+        {
+            statusOnline: "Online"
+        }
+    )
     res.redirect("/");
 }
 module.exports.login = async (req, res) => {
@@ -65,6 +72,12 @@ module.exports.loginPost = async (req, res) => {
             { _id: cartId }, { user_id: user.id }
         )
     }
+    await User.updateOne(
+        {tokenUser: user.tokenUser},
+        {
+            statusOnline: "Online"
+        }
+    )
     res.redirect("/");
 }
 module.exports.forgotPassword = async (req, res) => {
@@ -141,6 +154,12 @@ module.exports.resetPasswordPost = async (req, res) => {
     res.redirect("/");
 }
 module.exports.logout = async (req, res) => {
+    await User.updateOne(
+        {tokenUser: req.cookies.tokenUser}, 
+        {
+            statusOnline: "Offline"
+        }
+    )
     res.clearCookie('tokenUser');
     res.clearCookie('cartId');
     res.redirect("/");
