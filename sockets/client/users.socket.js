@@ -1,7 +1,7 @@
 const User = require("../../models/user.model");
 module.exports = (res) => {
     const myUserId = res.locals.user.id; //id cua chinh minh
-    _io.once("connection", (socket)=> {
+    _io.once("connection", async (socket)=> {
         //socket add friend from client to server
         socket.on("CLIENT_ADD_FRIEND", async (userId)=> {
             //push myUserId (yourself) to acceptFriend of user B
@@ -123,7 +123,6 @@ module.exports = (res) => {
         })
         //socket accept request from client to server
         socket.on("CLIENT_ACCEPT_FRIEND", async (userId) => {
-            const myUserId = res.locals.user.id; 
             const existAInB = await User.findOne({
                 _id: userId,
                 requestFriends: myUserId
@@ -156,14 +155,11 @@ module.exports = (res) => {
                     }
                 )
             }
-            //push userId va room_chat_id = "" vào friendList
-            await User.updateOne(
-                {_id: myUserId}, 
-                {$push: {friendList: {
-                    user_id: userId,
-                    room_chat_id: ""
-                }}}
-            )
         })
+        const myInfo = await User.findOne(
+            {_id: myUserId}
+        )
+        const friendList = myInfo.friendList;
+        const friendListId = friendList.map(item => item.user_id);
     })
 }

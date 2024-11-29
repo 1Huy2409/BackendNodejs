@@ -11,7 +11,7 @@ const usersRouter = require("./users.route");
 const userMiddleware = require("../../middlewares/client/user.middleware");
 const authMiddleware = require("../../middlewares/client/auth.middleware");
 module.exports = (app) => {
-    app.use(categoryMiddleware.category) //tat ca cac route phia client luon luon goi den middleware nay
+    app.use(categoryMiddleware.category)
     app.use(cartMiddleware.cartId)
     app.use(userMiddleware.tokenUser);
     app.use('/', homeRouter)

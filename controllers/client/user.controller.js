@@ -21,12 +21,22 @@ module.exports.registerPost = async (req, res) => {
     const tokenUser = generateHelper.generateRandomString(20);
     const user = new User({
         tokenUser: tokenUser,
-        email:req.body.email,
+        email: req.body.email,
         fullName: req.body.fullName,
         password: req.body.password
     });
+    user.statusOnline = "Online"
     await user.save();
     res.cookie('tokenUser', user.tokenUser);
+    //gui socket ve client ve status online
+    _io.once("connection", async (socket) => {
+        socket.broadcast.emit("SERVER_RETURN_USER_STATUS_ONLINE",
+            {
+                userId: user.id,
+                status: user.statusOnline
+            }
+        )
+    })
     res.redirect("/");
 }
 module.exports.login = async (req, res) => {
@@ -52,6 +62,15 @@ module.exports.loginPost = async (req, res) => {
         return;
     }
     res.cookie('tokenUser', user.tokenUser);
+    user.statusOnline = "Online"
+    _io.once("connection", async (socket) => {
+        socket.broadcast.emit("SERVER_RETURN_USER_STATUS_ONLINE",
+            {
+                userId: user.id,
+                status: user.statusOnline
+            }
+        )
+    })
     //luu user.id vao userId cua cart collection
     const cartId = req.cookies.cartId;
     const cart = await Cart.findOne({
@@ -65,12 +84,7 @@ module.exports.loginPost = async (req, res) => {
             { _id: cartId }, { user_id: user.id }
         )
     }
-    await User.updateOne(
-        {tokenUser: user.tokenUser},
-        {
-            statusOnline: "Online"
-        }
-    )
+
     res.redirect("/");
 }
 module.exports.forgotPassword = async (req, res) => {
@@ -147,12 +161,20 @@ module.exports.resetPasswordPost = async (req, res) => {
     res.redirect("/");
 }
 module.exports.logout = async (req, res) => {
-    await User.updateOne(
-        {tokenUser: req.cookies.tokenUser}, 
-        {
-            statusOnline: "Offline"
-        }
-    )
+    const user = await User.findOne({
+        tokenUser: req.cookies.tokenUser,
+        delete: false,
+        status: "active"
+    })
+    user.statusOnline = "Offline";
+    _io.once("connection", async (socket) => {
+        socket.broadcast.emit("SERVER_RETURN_USER_STATUS_ONLINE",
+            {
+                userId: user.id,
+                status: user.statusOnline
+            }
+        )
+    })
     res.clearCookie('tokenUser');
     res.clearCookie('cartId');
     res.redirect("/");

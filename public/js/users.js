@@ -145,3 +145,15 @@ socket.on("SERVER_RETURN_ID_ACCEPT_FRIEND", (data) => {
     }
 })
 // END SERVER_RETURN_ID_ACCEPT_FRIEND
+
+// SERVER_RETURN_USER_STATUS_ONLINE
+socket.on("SERVER_RETURN_USER_STATUS_ONLINE", (data) => {
+    const dataUserFriendList = document.querySelector("[data-user-friendList]");
+    if (dataUserFriendList) {
+        const boxStatus = dataUserFriendList.querySelector(`[user-id = "${data.userId}"]`);
+        if (boxStatus) {
+            boxStatus.querySelector("[status]").setAttribute("status", `${data.status}`);
+        }
+    }
+})
+// END_SERVER_RETURN_USER_STATUS_ONLINE

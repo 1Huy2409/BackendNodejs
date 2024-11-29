@@ -30,7 +30,9 @@ module.exports.chat = async (req, res) => {
         //end typing event
     })
     //end socketio
-    const chats = await Chat.find({});
+    const chats = await Chat.find({
+        //lay ra data dung roomchatId
+    });
     for (const chat of chats) {
         const infoUser = await User.findOne({
             _id: chat.user_id
