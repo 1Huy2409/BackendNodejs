@@ -27,13 +27,6 @@ module.exports.registerPost = async (req, res) => {
     });
     await user.save();
     res.cookie('tokenUser', user.tokenUser);
-    //co tokenUser cap nhat status
-    await User.updateOne(
-        {tokenUser: user.tokenUser},
-        {
-            statusOnline: "Online"
-        }
-    )
     res.redirect("/");
 }
 module.exports.login = async (req, res) => {

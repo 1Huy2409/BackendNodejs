@@ -29,7 +29,7 @@ if (listBtnRefuseFriend.length > 0) {
             button.closest(".box-user").classList.add("refuse");
             const userId = button.getAttribute("btn-refuse-friend");
             socket.emit("CLIENT_REFUSE_FRIEND", userId);
-        })  
+        })
     })
 }
 //chức năng chấp nhận lời mời kết bạn 
@@ -61,43 +61,42 @@ socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
         const boxAccept = document.createElement("div");
         boxAccept.classList.add("col-6");
         boxAccept.setAttribute("user-id", `${data.infoUserA._id}`)
-        let string = `
+        boxUserA.innerHTML = `
             <div class="box-user">
                 <div class="inner-avatar">
-                    <img 
-                        src="${data.infoUserA.avatar ? data.infoUserA.avatar : 'https://png.pngtree.com/element_our/20200610/ourmid/pngtree-default-avatar-image_2237213.jpg'}" 
-                        alt="${data.infoUserA.fullName}" 
-                    />
+                <img src="https://robohash.org/hicveldicta.png" alt="${data.infoUserA.fullName}">
                 </div>
                 <div class="inner-info">
-                    <div class="inner-name">${data.infoUserA.fullName}</div>
-                    <div class="inner-buttons">
-                        <button 
-                            class="btn btn-sm btn-primary mr-1" 
-                            btn-accept-friend="${data.infoUserA._id}">
-                            Chấp nhận
-                        </button>
-                        <button 
-                            class="btn btn-sm btn-primary mr-1" 
-                            btn-refuse-friend= "${data.infoUserA._id}">
-                            Xóa
-                        </button>
-                        <button 
-                            class="btn btn-sm btn-primary mr-1" 
-                            btn-deleted-friend 
-                            disabled>
-                            Đã xóa
-                        </button>
-                        <button 
-                            class="btn btn-sm btn-primary mr-1" 
-                            btn-accepted-friend 
-                            disabled>
-                            Đã chấp nhận
-                        </button>
-                    </div>
+                <div class="inner-name">${data.infoUserA.fullName}</div>
+                <div class="inner-buttons">
+                    <button 
+                    class="btn btn-sm btn-primary mr-1" 
+                    btn-accept-friend="${data.infoUserA._id}"
+                    >
+                    Chấp nhận
+                    </button>
+                    <button 
+                    class="btn btn-sm btn-secondary mr-1" 
+                    btn-refuse-friend="${data.infoUserA._id}"
+                    >
+                    Xóa
+                    </button>
+                    <button 
+                    class="btn btn-sm btn-secondary mr-1" 
+                    btn-deleted-friend="" disabled=""
+                    >
+                    Đã xóa
+                    </button>
+                    <button 
+                    class="btn btn-sm btn-primary mr-1" 
+                    btn-accepted-friend="" disabled=""
+                    >
+                    Đã chấp nhận
+                    </button>
                 </div>
-            </div>`
-        boxAccept.innerHTML = string;
+                </div>
+            </div>
+            `;
         dataUserAccept.appendChild(boxAccept);
         //bat su kien cho nut chap nhan
         const btnAcceptFriend = boxAccept.querySelector("[btn-accept-friend]");
@@ -111,7 +110,7 @@ socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
         //bat su kien cho nut xoa ket ban
         const btnRefuseFriend = boxAccept.querySelector("[btn-refuse-friend]");
         if (btnRefuseFriend) {
-            btnRefuseFriend.addEventListener("click", ()=> {
+            btnRefuseFriend.addEventListener("click", () => {
                 btnRefuseFriend.closest(".box-user").classList.add("refuse");
                 const userIdA = btnRefuseFriend.getAttribute("btn-refuse-friend");
                 socket.emit("CLIENT_REFUSE_FRIEND", userIdA);
@@ -130,7 +129,6 @@ socket.on("SERVER_RETURN_ID_CANCEL_FRIEND", (data) => {
         const boxAccept = dataUserAccept.querySelector(`[user-id = "${data.userIdA}"]`);
         if (boxAccept) {
             dataUserAccept.removeChild(boxAccept);
-            socket.emit("CLIENT_CANCEL_FRIEND", data.userIdA);
         }
     }
 })
@@ -143,7 +141,6 @@ socket.on("SERVER_RETURN_ID_ACCEPT_FRIEND", (data) => {
         const boxRemove = dataNotUserAccept.querySelector(`[user-id = "${data.userIdA}"]`);
         if (boxRemove) {
             dataNotUserAccept.removeChild(boxRemove);
-            socket.emit("CLIENT_ADD_FRIEND", data.userIdB);
         }
     }
 })

@@ -1,9 +1,9 @@
 const User = require("../../models/user.model");
 module.exports = (res) => {
+    const myUserId = res.locals.user.id; //id cua chinh minh
     _io.once("connection", (socket)=> {
         //socket add friend from client to server
         socket.on("CLIENT_ADD_FRIEND", async (userId)=> {
-            const myUserId = res.locals.user.id; //id cua chinh minh
             //push myUserId (yourself) to acceptFriend of user B
             const existAInB = await User.findOne({
                 _id: userId,
@@ -43,19 +43,18 @@ module.exports = (res) => {
             socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND", 
                 {
                     infoUserA: infoUserA,
-                    userIdB: infoUserB.id
+                    userIdB: userId
                 }
             )
             socket.broadcast.emit("SERVER_RETURN_ID_ACCEPT_FRIEND", 
                 {
-                    userIdA: infoUserA.id,
+                    userIdA: myUserId,
                     userIdB: userId
                 }
             )
         })
         //socket cancel request friend from client to server
         socket.on("CLIENT_CANCEL_FRIEND", async (userId) => {
-            const myUserId = res.locals.user.id; //id cua A (add B)
             //xóa id của A trong acpt của B
             const existAInB = await User.findOne({
                 _id: userId,
@@ -84,9 +83,6 @@ module.exports = (res) => {
             const infoUserB = await User.findOne({
                 _id: userId
             })
-            const infoUserA = await User.findOne({
-                _id: myUserId
-            })
             socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", 
                 {
                     userIdB: infoUserB.id,
@@ -94,13 +90,12 @@ module.exports = (res) => {
                 }
             )
             socket.broadcast.emit("SERVER_RETURN_ID_CANCEL_FRIEND", {
-                userIdA: infoUserA.id,
-                userIdB: infoUserB.id
+                userIdA: myUserId,
+                userIdB: userId
             })
         })
         //socket refuse request from client to server
         socket.on("CLIENT_REFUSE_FRIEND", async (userId) => {
-            const myUserId = res.locals.user.id;
             const existAInB = await User.findOne({
                 _id: userId,
                 requestFriends: myUserId
