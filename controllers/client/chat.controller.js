@@ -1,19 +1,20 @@
 const Chat = require("../../models/chat.model")
 const User = require("../../models/user.model")
 module.exports.chat = async (req, res) => {
-    //render ra giao dien chat
+    const roomChatId = req.params.roomChatId
     const userId = res.locals.user.id;
     const fullName = res.locals.user.fullName;
     //begin socketio
     _io.once("connection", (socket) => {
-        console.log("a user connected!", socket.id)
+        socket.join(roomChatId);
         socket.on("CLIENT_SEND_MESSAGE", async (content) => {
             const chat = new Chat({
+                room_chat_id: roomChatId,
                 user_id: userId,
                 content: content
             })
             await chat.save();
-            _io.emit("SERVER_RETURN_MESSAGE", {
+            _io.to(roomChatId).emit("SERVER_RETURN_MESSAGE", {
                 fullName: fullName,
                 userId: userId,
                 content: content
@@ -21,7 +22,7 @@ module.exports.chat = async (req, res) => {
         })
         //typing event
         socket.on("CLIENT_SEND_TYPING", async(type) => {
-            socket.broadcast.emit("SERVER_RETURN_TYPING", {
+            socket.broadcast.to(roomChatId).emit("SERVER_RETURN_TYPING", {
                 fullName: fullName,
                 userId: userId,
                 type: type
@@ -31,7 +32,8 @@ module.exports.chat = async (req, res) => {
     })
     //end socketio
     const chats = await Chat.find({
-        //lay ra data dung roomchatId
+        room_chat_id: roomChatId,
+        delete: false
     });
     for (const chat of chats) {
         const infoUser = await User.findOne({

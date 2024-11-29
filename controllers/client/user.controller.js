@@ -25,15 +25,20 @@ module.exports.registerPost = async (req, res) => {
         fullName: req.body.fullName,
         password: req.body.password
     });
-    user.statusOnline = "Online"
     await user.save();
     res.cookie('tokenUser', user.tokenUser);
+    await User.updateOne(
+        {tokenUser: user.tokenUser},
+        {
+            statusOnline: "Online"
+        }
+    )
     //gui socket ve client ve status online
     _io.once("connection", async (socket) => {
         socket.broadcast.emit("SERVER_RETURN_USER_STATUS_ONLINE",
             {
                 userId: user.id,
-                status: user.statusOnline
+                status: "Online"
             }
         )
     })
@@ -62,12 +67,17 @@ module.exports.loginPost = async (req, res) => {
         return;
     }
     res.cookie('tokenUser', user.tokenUser);
-    user.statusOnline = "Online"
+    await User.updateOne(
+        {tokenUser: user.tokenUser},
+        {
+            statusOnline: "Online"
+        }
+    )
     _io.once("connection", async (socket) => {
         socket.broadcast.emit("SERVER_RETURN_USER_STATUS_ONLINE",
             {
                 userId: user.id,
-                status: user.statusOnline
+                status: "Online"
             }
         )
     })
@@ -166,12 +176,17 @@ module.exports.logout = async (req, res) => {
         delete: false,
         status: "active"
     })
-    user.statusOnline = "Offline";
+    await User.updateOne(
+        {tokenUser: req.cookies.tokenUser}, 
+        {
+            statusOnline: "Offline"
+        }
+    )
     _io.once("connection", async (socket) => {
         socket.broadcast.emit("SERVER_RETURN_USER_STATUS_ONLINE",
             {
                 userId: user.id,
-                status: user.statusOnline
+                status: "Offline"
             }
         )
     })

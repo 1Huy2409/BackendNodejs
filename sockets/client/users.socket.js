@@ -1,4 +1,5 @@
 const User = require("../../models/user.model");
+const RoomChat = require("../../models/room-chat.model");
 module.exports = (res) => {
     const myUserId = res.locals.user.id; //id cua chinh minh
     _io.once("connection", async (socket)=> {
@@ -127,39 +128,54 @@ module.exports = (res) => {
                 _id: userId,
                 requestFriends: myUserId
             })
+            const existBinA = await User.findOne({
+                _id: myUserId,
+                acceptFriends: userId
+            })
+            let roomChatId;
+            if (existAInB && existBinA) {
+                //khoi tao mot room-chat cho 2 nguoi
+                const roomChat = new RoomChat(
+                    {
+                        users: [
+                            {
+                                user_id: myUserId,
+                                role: "SuperAdmin"
+                            },
+                            {
+                                user_id: userId,
+                                role: "SuperAdmin"
+                            }
+                        ],
+                    }
+                )
+                await roomChat.save();
+                roomChatId = roomChat.id;
+            }
             if (existAInB) {
                 await User.updateOne(
                     {_id: userId},
                     {
                         $push: {friendList: {
                             user_id: myUserId,
-                            room_chat_id: ""
+                            room_chat_id: roomChatId 
                         }},
                         $pull: {requestFriends: myUserId}
                     }
                 )
             }
-            const existBinA = await User.findOne({
-                _id: myUserId,
-                acceptFriends: userId
-            })
             if (existBinA) {
                 await User.updateOne(
                     {_id: myUserId},
                     {
                         $push: {friendList: {
                             user_id: userId,
-                            room_chat_id: ""
+                            room_chat_id: roomChatId
                         }},
                         $pull: {acceptFriends: userId}
                     }
                 )
             }
         })
-        const myInfo = await User.findOne(
-            {_id: myUserId}
-        )
-        const friendList = myInfo.friendList;
-        const friendListId = friendList.map(item => item.user_id);
     })
 }
