@@ -1,7 +1,6 @@
 const User = require("../../models/user.model");
 const RoomChat = require('../../models/room-chat.model');
 module.exports.index = async (req, res) => {
-    // show list of rooms-chat
     const roomList = await RoomChat.find(
         {   
             typeRoom: "group",
@@ -15,7 +14,6 @@ module.exports.index = async (req, res) => {
     })
 }
 module.exports.create = async (req, res) => {
-    //tra ve user trong friendList cho trang create
     const myUserId = res.locals.user.id;
     const myUser = await User.findOne({
         _id: myUserId,
@@ -34,7 +32,7 @@ module.exports.create = async (req, res) => {
     })
 }
 module.exports.createPost = async (req, res) => {
-    const usersId = req.body.usersId; //mang cac userId
+    const usersId = req.body.usersId;
     const title = req.body.title;
     const dataRoom = {
         title: title, 
